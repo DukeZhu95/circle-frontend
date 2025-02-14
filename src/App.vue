@@ -17,14 +17,15 @@
 </template>
 
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+/* 添加全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+body {
+  background-color: white;
 }
 </style>
 
@@ -33,6 +34,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: white; /* 确保整个应用背景为白色 */
+  width: 100%; /* 确保宽度充满 */
 }
 
 .header {
@@ -40,11 +43,14 @@
   color: white;
   padding: 1rem;
   text-align: center;
+  width: 100%;
 }
 
 .main {
   flex: 1;
-  background-color: #f5f5f5;
+  width: 100%;
+  padding: 0;
+  background-color: white;
 }
 
 .footer {
@@ -52,8 +58,10 @@
   color: white;
   text-align: center;
   padding: 1rem;
+  width: 100%;
 }
 </style>
+
 <script setup lang="ts">
 import {createRouter as $router} from "vue-router";
 </script>

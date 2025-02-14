@@ -84,9 +84,9 @@ onMounted(() => {
         />
       </div>
       <select v-model="sortBy" class="sort-select">
-        <option value="title" class="sort-option">Sort by Title</option>
-        <option value="price" class="sort-option">Sort by Price</option>
-        <option value="stock" class="sort-option">Sort by Stock</option>
+        <option value="title">Sort by Title</option>
+        <option value="price">Sort by Price</option>
+        <option value="stock">Sort by Stock</option>
       </select>
     </div>
 
@@ -119,88 +119,63 @@ onMounted(() => {
 
 <style scoped>
 .container {
+  width: 100%;
+  min-height: 100%;
+  padding: 40px 0 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls {
+  justify-content: center;
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.search-bar, .sort-select {
+  width: 100%;
 }
 
 .search-bar {
-  margin-bottom: 1px;
+  width: 400px;
+  flex: unset;
+  max-width: 500px;
 }
 
 .search-input {
   width: 100%;
-  max-width: 500px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 4px;
-}
-
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.book-card {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-}
-
-.book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.book-title {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  color: #2c3e50;
-}
-
-.book-details p {
-  margin: 8px 0;
-  color: #666;
-}
-
-.price {
-  color: #e53e3e;
-  font-size: 1.1rem;
-}
-
-.stock {
-  color: #2f855a;
-}
-
-.controls {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.search-bar {
-  flex: 1;
+  box-sizing: border-box;
 }
 
 .sort-select {
+  width: 200px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 4px;
   background-color: white;
-  min-width: 150px;
   cursor: pointer;
   color: #333;
+  box-sizing: border-box;
 }
 
-.sort-select option {
+.sort-select {
+  width: 200px; /* 给定一个固定宽度 */
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
   background-color: white;
+  cursor: pointer;
   color: #333;
-  padding: 8px;
+  box-sizing: border-box;
 }
 
 .sort-select:focus {
@@ -209,17 +184,111 @@ onMounted(() => {
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-.search-input {
-  width: 100%;
-  max-width: 500px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #333;
+.book-grid {
+  width: 100%;        /* 设置宽度 */
+  max-width: 1400px;  /* 设置最大宽度 */
+  margin: 0 auto;
+  gap: 80px;         /* 调整卡片间距 */
+  padding: 0 40px;
+  display: grid;
+  box-sizing: border-box; /* 添加这行 */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-.search-input::placeholder {
-  color: #999;
+/* 移动端样式 */
+@media screen and (max-width: 767px) {  /* 添加 screen */
+  .container {
+    padding: 20px 0;
+    background-color: white;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .sort-select {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .book-grid {
+    grid-template-columns: 1fr;  /* 强制单列 */
+    gap: 20px;
+    padding: 0 10px;
+  }
+}
+
+/* 更小屏幕的优化 */
+@media screen and (max-width: 390px) {  /* 添加 screen */
+  .controls {
+    padding: 0 10px;
+  }
+
+  .book-grid {
+    padding: 0 10px;
+    gap: 15px;
+  }
+}
+
+.book-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;    /* 稍微减小内边距 */
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 15px;       /* 添加内容间距 */
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.book-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;  /* 增加标题下方间距 */
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.book-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;  /* 增加详情项之间的间距 */
+}
+
+.book-details p {
+  margin: 0;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.book-details p strong {
+  color: #4a5568;
+}
+
+.price {
+  color: #e53e3e;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.stock {
+  color: #2f855a;
 }
 
 .loading, .error {
