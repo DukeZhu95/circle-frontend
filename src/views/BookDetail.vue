@@ -14,11 +14,14 @@ const purchaseStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
 const fetchBook = async () => {
   const id = route.params.id as string
   try {
+    console.log('Fetching book with id:', id);
     const response = await getBook(id)
-    book.value = response.data
+    console.log('Book data:', response.data);
+    // 修改这里，使用 response.data.book
+    book.value = response.data.book  // 从响应中取出 book 对象
   } catch (e) {
+    console.error('Error fetching book:', e)
     error.value = 'Failed to fetch book details'
-    console.error(e)
   } finally {
     loading.value = false
   }
@@ -66,12 +69,12 @@ onMounted(() => {
       <div class="book-info">
         <div class="info-row">
           <strong>Author:</strong>
-          <span>{{ book.author }}</span>
+          <span>{{ book.author || 'Unknown' }}</span>
         </div>
 
         <div class="info-row">
           <strong>ISBN:</strong>
-          <span>{{ book.isbn }}</span>
+          <span>{{ book.isbn || 'N/A' }}</span>
         </div>
 
         <div class="info-row">

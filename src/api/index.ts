@@ -1,41 +1,28 @@
-import { mockBooks } from '../mock/books'
+import axios from 'axios'
 import type { Book, PurchaseResponse } from '../types'
 
-// 模拟延迟函数
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const api = axios.create({
+    baseURL: '/books',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+})
 
-// 获取单本书详情
-export const getBook = async (id: string): Promise<{ data: Book }> => {
-    await delay(300) // 模拟网络延迟
-    const book = mockBooks.find(b => b.id === id)
-    if (!book) {
-        throw new Error('Book not found')
+// 简化的拦截器
+api.interceptors.response.use(
+    response => response,
+    error => {
+        console.error('API Error:', {
+            url: error.config?.url,
+            method: error.config?.method,
+            status: error.response?.status,
+            data: error.response?.data
+        });
+        return Promise.reject(error);
     }
-    return { data: book }
-}
+);
 
-// 购买书籍
-export const purchaseBook = async (id: string): Promise<{ data: PurchaseResponse }> => {
-    await delay(500) // 模拟网络延迟
-    const book = mockBooks.find(b => b.id === id)
-    if (!book) {
-        throw new Error('Book not found')
-    }
-    if (book.availableStock <= 0) {
-        throw new Error('Book out of stock')
-    }
-    // 更新库存
-    book.availableStock -= 1
-    return {
-        data: {
-            message: 'Purchase successful',
-            book
-        }
-    }
-}
-
-// 获取书籍列表
-export const getBooks = async (): Promise<{ data: { books: Book[] } }> => {
-    await delay(300)
-    return { data: { books: mockBooks } }
-}
+export const getBooks = () => api.get<{ books: Book[] }>('/')
+export const getBook = (id: string) => api.get<{ book: Book }>(`/${id}`)
+export const purchaseBook = (id: string) => api.post<PurchaseResponse>(`/${id}/purchase`)

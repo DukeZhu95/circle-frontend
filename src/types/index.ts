@@ -1,5 +1,5 @@
 export interface Book {
-    id: string
+    id: string | number
     title: string
     author: string
     isbn: string
@@ -7,7 +7,12 @@ export interface Book {
     availableStock: number
 }
 
-// 添加响应类型
 export interface BooksResponse {
     books: Book[]
+}
+
+// 添加这个接口
+export interface PurchaseResponse {
+    message: string
+    book: Book
 }
