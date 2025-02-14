@@ -39,7 +39,7 @@ body {
 }
 
 .header {
-  background-color: #1a1a1a;
+  background-color: #343434;
   color: white;
   padding: 1rem;
   text-align: center;
@@ -50,11 +50,11 @@ body {
   flex: 1;
   width: 100%;
   padding: 0;
-  background-color: white;
+  background: linear-gradient(to bottom, #f8f8f8, #e8e8e8);
 }
 
 .footer {
-  background-color: #1a1a1a;
+  background-color: #343434;
   color: white;
   text-align: center;
   padding: 1rem;

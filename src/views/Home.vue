@@ -105,6 +105,7 @@ onMounted(() => {
           class="book-card"
           @click="$router.push(`/book/${book.id}`)"
       >
+        <div class="book-background"></div>
         <h3 class="book-title">{{ book.title }}</h3>
         <div class="book-details">
           <p><strong>Author:</strong> {{ book.author }}</p>
@@ -125,6 +126,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
 }
 
 .controls {
@@ -154,6 +156,20 @@ onMounted(() => {
   border: 2px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: #343434;  /* 改变背景色 */
+  color: white;  /* 确保文字是白色的 */
+}
+
+/* 添加 placeholder 的样式 */
+.search-input::placeholder {
+  color: #888;  /* 使占位符文字颜色更柔和 */
+}
+
+/* 聚焦时的样式 */
+.search-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background-color: #343434;  /* 保持聚焦时的背景色 */
 }
 
 .sort-select {
@@ -238,21 +254,42 @@ onMounted(() => {
 }
 
 .book-card {
+  position: relative; /* 添加这行 */
   background: white;
   border-radius: 12px;
-  padding: 25px;    /* 稍微减小内边距 */
+  padding: 25px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 15px;       /* 添加内容间距 */
+  gap: 15px;
+  overflow: hidden; /* 添加这行以确保背景不会溢出 */
 }
 
 .book-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.book-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../images/book.png'); /* 使用 @ 别名指向 src 目录 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.1; /* 调整透明度使其不影响文字阅读 */
+  z-index: 0;
+}
+
+.book-title, .book-details {
+  position: relative;
+  z-index: 1;
 }
 
 .book-title {
