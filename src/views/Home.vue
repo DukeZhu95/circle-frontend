@@ -15,11 +15,11 @@ const filters = ref({
   inStock: false
 })
 
-// 过滤和排序后的书籍列表
+// Books that are filtered and sorted
 const filteredAndSortedBooks = computed(() => {
   let result = [...books.value]
 
-  // 应用价格筛选
+  // Apply filters
   if (filters.value.minPrice) {
     result = result.filter(book => book.price >= Number(filters.value.minPrice))
   }
@@ -27,12 +27,12 @@ const filteredAndSortedBooks = computed(() => {
     result = result.filter(book => book.price <= Number(filters.value.maxPrice))
   }
 
-  // 仅显示有库存
+  // Apply inStock filter
   if (filters.value.inStock) {
     result = result.filter(book => book.availableStock > 0)
   }
 
-  // 搜索过滤
+  // Apply search query
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase()
     result = result.filter(book =>
@@ -42,7 +42,7 @@ const filteredAndSortedBooks = computed(() => {
     )
   }
 
-  // 排序
+  // Sort the result
   return result.sort((a, b) => {
     switch (sortBy.value) {
       case 'price':
@@ -156,20 +156,18 @@ onMounted(() => {
   border: 2px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: #343434;  /* 改变背景色 */
-  color: white;  /* 确保文字是白色的 */
+  background-color: #343434;
+  color: white;
 }
 
-/* 添加 placeholder 的样式 */
 .search-input::placeholder {
-  color: #888;  /* 使占位符文字颜色更柔和 */
+  color: #888;
 }
 
-/* 聚焦时的样式 */
 .search-input:focus {
   outline: none;
   border-color: #4a90e2;
-  background-color: #343434;  /* 保持聚焦时的背景色 */
+  background-color: #343434;
 }
 
 .sort-select {
@@ -184,7 +182,7 @@ onMounted(() => {
 }
 
 .sort-select {
-  width: 200px; /* 给定一个固定宽度 */
+  width: 200px;
   padding: 10px;
   border: 2px solid #ddd;
   border-radius: 4px;
@@ -201,18 +199,18 @@ onMounted(() => {
 }
 
 .book-grid {
-  width: 100%;        /* 设置宽度 */
-  max-width: 1400px;  /* 设置最大宽度 */
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  gap: 80px;         /* 调整卡片间距 */
+  gap: 80px;
   padding: 0 40px;
   display: grid;
-  box-sizing: border-box; /* 添加这行 */
+  box-sizing: border-box;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-/* 移动端样式 */
-@media screen and (max-width: 767px) {  /* 添加 screen */
+/* Mobile */
+@media screen and (max-width: 767px) {
   .container {
     padding: 20px 0;
     background-color: white;
@@ -235,14 +233,14 @@ onMounted(() => {
   }
 
   .book-grid {
-    grid-template-columns: 1fr;  /* 强制单列 */
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 0 10px;
   }
 }
 
-/* 更小屏幕的优化 */
-@media screen and (max-width: 390px) {  /* 添加 screen */
+/* Smaller screen */
+@media screen and (max-width: 390px) {
   .controls {
     padding: 0 10px;
   }
@@ -254,7 +252,7 @@ onMounted(() => {
 }
 
 .book-card {
-  position: relative; /* 添加这行 */
+  position: relative;
   background: white;
   border-radius: 12px;
   padding: 25px;
@@ -265,7 +263,7 @@ onMounted(() => {
   flex-direction: column;
   height: 100%;
   gap: 15px;
-  overflow: hidden; /* 添加这行以确保背景不会溢出 */
+  overflow: hidden;
 }
 
 .book-card:hover {
@@ -279,11 +277,11 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../images/book.png'); /* 使用 @ 别名指向 src 目录 */
+  background-image: url('../images/book.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.1; /* 调整透明度使其不影响文字阅读 */
+  opacity: 0.1;
   z-index: 0;
 }
 
@@ -294,7 +292,7 @@ onMounted(() => {
 
 .book-title {
   font-size: 1.5rem;
-  margin-bottom: 20px;  /* 增加标题下方间距 */
+  margin-bottom: 20px;
   color: #2c3e50;
   font-weight: 600;
 }
@@ -303,7 +301,7 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;  /* 增加详情项之间的间距 */
+  gap: 15px;
 }
 
 .book-details p {

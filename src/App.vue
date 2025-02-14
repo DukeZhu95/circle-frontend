@@ -17,7 +17,7 @@
 </template>
 
 <style>
-/* 添加全局样式 */
+/* Adding a global CSS reset */
 * {
   margin: 0;
   padding: 0;
@@ -34,8 +34,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: white; /* 确保整个应用背景为白色 */
-  width: 100%; /* 确保宽度充满 */
+  background-color: white;
+  width: 100%;
 }
 
 .header {

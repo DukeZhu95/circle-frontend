@@ -366,4 +366,99 @@ onMounted(() => {
   border: 1px solid #e53e3e;
   color: #c53030;
 }
+
+/* Pad */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .book-detail {
+    padding: 20px;
+  }
+
+  .book-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .info-row {
+    padding: 10px 0;
+  }
+
+  .info-row strong {
+    width: 120px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .book-detail {
+    padding: 15px;
+    border-radius: 6px;
+  }
+
+  .book-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .info-row strong {
+    width: 100%;
+  }
+
+  .purchase-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .dialog-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .dialog-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancel-button, .confirm-button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .status-message {
+    margin-top: 12px;
+    padding: 10px;
+  }
+}
+
+/* Smaller screen */
+@media screen and (max-width: 320px) {
+  .book-title {
+    font-size: 1.3rem;
+  }
+
+  .info-row {
+    font-size: 0.9rem;
+  }
+
+  .dialog-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .dialog-message {
+    font-size: 0.9rem;
+  }
+}
 </style>
