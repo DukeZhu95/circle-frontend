@@ -84,9 +84,9 @@ onMounted(() => {
         />
       </div>
       <select v-model="sortBy" class="sort-select">
-        <option value="title">Sort by Title</option>
-        <option value="price">Sort by Price</option>
-        <option value="stock">Sort by Stock</option>
+        <option value="title" class="sort-option">Sort by Title</option>
+        <option value="price" class="sort-option">Sort by Price</option>
+        <option value="stock" class="sort-option">Sort by Stock</option>
       </select>
     </div>
 
@@ -194,6 +194,32 @@ onMounted(() => {
   background-color: white;
   min-width: 150px;
   cursor: pointer;
+  color: #333;
+}
+
+.sort-select option {
+  background-color: white;
+  color: #333;
+  padding: 8px;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+}
+
+.search-input::placeholder {
+  color: #999;
 }
 
 .loading, .error {

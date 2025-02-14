@@ -10,25 +10,16 @@ const book = ref<Book | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 const purchaseStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
+const showConfirmDialog = ref(false)
 
 const fetchBook = async () => {
   const id = route.params.id as string
   try {
-    // console.log('Fetching book with id:', id);
+    console.log('Fetching book with id:', id)
     const response = await getBook(id)
-    // console.log('Full API Response:', response);
-    // console.log('Response data:', response.data);
     book.value = response.data.book
-    // console.log('Processed book data:', book.value);
   } catch (e) {
-    // console.error('Error fetching book:', e)
-    if (axios.isAxiosError(e)) {
-      console.error('Axios error details:', {
-        status: e.response?.status,
-        data: e.response?.data,
-        headers: e.response?.headers
-      });
-    }
+    console.error('Error fetching book:', e)
     error.value = 'Failed to fetch book details'
   } finally {
     loading.value = false
@@ -39,13 +30,21 @@ const handlePurchase = async () => {
   if (!book.value) return
   purchaseStatus.value = 'loading'
   try {
-    await purchaseBook(book.value.id)
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    await purchaseBook(book.value.id.toString())
     purchaseStatus.value = 'success'
-    // 重新获取书籍信息以更新库存
     await fetchBook()
+
+    setTimeout(() => {
+      purchaseStatus.value = 'idle'
+      showConfirmDialog.value = false
+    }, 3000)
   } catch (e) {
     purchaseStatus.value = 'error'
-    console.error(e)
+    console.error('Purchase failed:', e)
+    setTimeout(() => {
+      purchaseStatus.value = 'idle'
+    }, 3000)
   }
 }
 
@@ -64,6 +63,7 @@ onMounted(() => {
     </button>
 
     <div v-if="loading" class="loading">
+      <div class="loading-spinner"></div>
       Loading...
     </div>
 
@@ -99,11 +99,13 @@ onMounted(() => {
       </div>
 
       <div class="purchase-section">
+        <!-- Purchase button -->
         <button
             class="purchase-button"
-            @click="handlePurchase"
+            @click="showConfirmDialog = true"
             :disabled="purchaseStatus === 'loading' || book.availableStock === 0"
         >
+          <span v-if="purchaseStatus === 'loading'" class="loading-spinner small"></span>
           {{
             book.availableStock === 0
                 ? 'Out of Stock'
@@ -113,11 +115,38 @@ onMounted(() => {
           }}
         </button>
 
-        <div v-if="purchaseStatus === 'success'" class="success-message">
+        <!-- Confirmation -->
+        <div v-if="showConfirmDialog" class="dialog-overlay">
+          <div class="dialog-content">
+            <h3>Confirm Purchase</h3>
+            <p class="dialog-message">
+              Are you sure you want to purchase "{{ book.title }}" for ${{ book.price }}?
+            </p>
+            <div class="dialog-buttons">
+              <button
+                  class="cancel-button"
+                  @click="showConfirmDialog = false"
+                  :disabled="purchaseStatus === 'loading'"
+              >
+                Cancel
+              </button>
+              <button
+                  class="confirm-button"
+                  @click="handlePurchase"
+                  :disabled="purchaseStatus === 'loading'"
+              >
+                Confirm Purchase
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prompt -->
+        <div v-if="purchaseStatus === 'success'" class="status-message success">
           Purchase successful!
         </div>
 
-        <div v-if="purchaseStatus === 'error'" class="error-message">
+        <div v-if="purchaseStatus === 'error'" class="status-message error">
           Purchase failed. Please try again.
         </div>
       </div>
@@ -167,16 +196,16 @@ onMounted(() => {
   display: flex;
   padding: 12px 0;
   border-bottom: 1px solid #eee;
-  color: #333; /* 添加默认文本颜色 */
+  color: #333;
 }
 
 .info-row strong {
   width: 150px;
-  color: #4a5568; /* 标签文本颜色 */
+  color: #4a5568;
 }
 
 .info-row span {
-  color: #2d3748; /* 值的文本颜色 */
+  color: #2d3748;
 }
 
 .price {
@@ -213,16 +242,6 @@ onMounted(() => {
   cursor: not-allowed;
 }
 
-.success-message {
-  color: #38a169;
-  margin-top: 10px;
-}
-
-.error-message {
-  color: #e53e3e;
-  margin-top: 10px;
-}
-
 .loading, .error {
   text-align: center;
   padding: 40px;
@@ -232,5 +251,119 @@ onMounted(() => {
 
 .error {
   color: #e53e3e;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+.loading-spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-content {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.dialog-content h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dialog-message {
+  color: #4a5568;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.cancel-button, .confirm-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.cancel-button {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.confirm-button {
+  background-color: #48bb78;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #38a169;
+}
+
+.cancel-button:hover {
+  background-color: #cbd5e0;
+}
+
+.confirm-button:disabled, .cancel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-message {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 4px;
+  text-align: center;
+
+}
+
+.status-message.success {
+  background-color: #f0fff4;
+  border: 1px solid #48bb78;
+  color: #2f855a;
+}
+
+.status-message.error {
+  background-color: #fff5f5;
+  border: 1px solid #e53e3e;
+  color: #c53030;
 }
 </style>

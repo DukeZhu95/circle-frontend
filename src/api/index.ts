@@ -9,19 +9,19 @@ const api = axios.create({
     }
 })
 
-// 简化的拦截器
 api.interceptors.response.use(
     response => response,
     error => {
+        const errorMessage = error.response?.data?.message || 'An error occurred'
         console.error('API Error:', {
             url: error.config?.url,
             method: error.config?.method,
             status: error.response?.status,
-            data: error.response?.data
-        });
-        return Promise.reject(error);
+            message: errorMessage
+        })
+        return Promise.reject(error)
     }
-);
+)
 
 export const getBooks = () => api.get<{ books: Book[] }>('/')
 export const getBook = (id: string) => api.get<{ book: Book }>(`/${id}`)
