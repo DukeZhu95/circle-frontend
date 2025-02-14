@@ -14,13 +14,21 @@ const purchaseStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
 const fetchBook = async () => {
   const id = route.params.id as string
   try {
-    console.log('Fetching book with id:', id);
+    // console.log('Fetching book with id:', id);
     const response = await getBook(id)
-    console.log('Book data:', response.data);
-    // 修改这里，使用 response.data.book
-    book.value = response.data.book  // 从响应中取出 book 对象
+    // console.log('Full API Response:', response);
+    // console.log('Response data:', response.data);
+    book.value = response.data.book
+    // console.log('Processed book data:', book.value);
   } catch (e) {
-    console.error('Error fetching book:', e)
+    // console.error('Error fetching book:', e)
+    if (axios.isAxiosError(e)) {
+      console.error('Axios error details:', {
+        status: e.response?.status,
+        data: e.response?.data,
+        headers: e.response?.headers
+      });
+    }
     error.value = 'Failed to fetch book details'
   } finally {
     loading.value = false
@@ -159,11 +167,16 @@ onMounted(() => {
   display: flex;
   padding: 12px 0;
   border-bottom: 1px solid #eee;
+  color: #333; /* 添加默认文本颜色 */
 }
 
 .info-row strong {
   width: 150px;
-  color: #4a5568;
+  color: #4a5568; /* 标签文本颜色 */
+}
+
+.info-row span {
+  color: #2d3748; /* 值的文本颜色 */
 }
 
 .price {
